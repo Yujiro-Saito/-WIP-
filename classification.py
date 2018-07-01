@@ -10,10 +10,10 @@ from janome.tokenfilter import POSKeepFilter
 sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
 
 
-directory = os.listdir("./dokujo-tsushin")
+directory = os.listdir("./topic-news")
 tempList = []
 for file in directory:
-    f = codecs.open("./dokujo-tsushin/{}".format(file),'r', 'utf-8', errors='ignore')
+    f = codecs.open("./topic-news/{}".format(file),'r', 'utf-8', errors='ignore')
     lines = f.readlines()
     rmList = [w.strip() for w in lines]
     tempList.append(rmList)
@@ -22,7 +22,7 @@ for file in directory:
 file = codecs.open("stopwords.txt","r","utf-8")
 lines = file.read()
 stopwords = lines.split("\n")
-stoplist = ['ため','せい','それら','あれこれ','ごと','とおり','それ','これ','これら',"ころ",'よう','こと','もの','の','さまざま','ほか','ん','さ','大','中','小',
+stoplist = ['ため','せい','それら','ならでは','あれこれ','ごと','とおり','それ','これ','これら',"ころ",'よう','こと','もの','の','さまざま','ほか','ん','さ','大','中','小',
             '高','今後','費', '.', '℃',"われわれ",'百','たち','千','万','億','円','等','用','月','日','年','その他','化','比','力',"自分",'的','当社','所','後','前',"1","2","3","4","5","6","7","8","9"]
 for sw in stoplist:
     stopwords.append(sw)
@@ -44,20 +44,18 @@ for list in tempList:
     else:
         articlesList.append("".join(list))
 
-#名詞のみスペース区切りにする
-#一行にする labelつける
-#Textに保存する
-
 t = Tokenizer()
 tokenArr = []
 finalArr = []
 nounString = ""
-labelStr = "__label__one , "
+labelStr = "__label__nine , "
 processedSent = ""
+
 
 
 for  article in articlesList:
     #Tokenization
+    
     tokens = t.tokenize(article)
     nounString = ""
     processedSent = ""
@@ -70,14 +68,13 @@ for  article in articlesList:
         processedSent = labelStr + nounString
     finalArr.append(processedSent)
 
-trainArr = finalArr[:697]
-testArr = finalArr[697:]
+trainArr = finalArr[:617]
+testArr = finalArr[617:]
 trainString = "\n".join(trainArr)
 testString = "\n".join(testArr)
 
-with open("oneTrain.txt", "w", encoding='utf-8') as text_file:
+with open("nineTrain.txt", "w", encoding='utf-8') as text_file:
     text_file.write(trainString)
 
-with open("oneTest.txt", "w", encoding='utf-8') as text_file:
-    text_file.write(testString)
-
+with open("nineTest.txt", "w", encoding='utf-8') as text_file:
+    text_file.write(testString) 
